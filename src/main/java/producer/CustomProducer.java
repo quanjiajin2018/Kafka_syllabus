@@ -1,10 +1,9 @@
 package producer;
 
-import org.apache.kafka.clients.producer.Callback;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.clients.producer.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -35,12 +34,18 @@ public class CustomProducer {
         //1.8 value序列化
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
+        List<String> inList = new ArrayList<String>();
+        inList.add("interceptor.TimeInterceptor");
+        inList.add("interceptor.CounterInterceptor");
+
+        props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG,inList);
+
         //2.实例化KafkaProducer
         KafkaProducer<String,String> producer = new KafkaProducer<String,String>(props);
 
         for(int i = 0 ;i< 50;i++){
             //3.调用Producer 的send 方法，进行消息的发送,每条待发送的消息，都必需封闭为一个Record 对象
-            producer.send(new ProducerRecord<String, String>("test2", "hello" + i), new Callback() {
+            producer.send(new ProducerRecord<String, String>("first", "hello" + i), new Callback() {
                 public void onCompletion(RecordMetadata recordMetadata, Exception e) {
 
                     if(recordMetadata != null) {

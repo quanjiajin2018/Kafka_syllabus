@@ -28,7 +28,7 @@ public class CustomProducer1 {
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
         //1.9 设置分区
-        props.put("partitioner.class" ,"partitioner.CustomPartitioner");
+       // props.put("partitioner.class" ,"partitioner.CustomPartitioner");
 
         //2.实例化KafkaProducer
         KafkaProducer<String,String> producer = new KafkaProducer<String,String>(props);
